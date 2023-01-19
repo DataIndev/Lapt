@@ -3,6 +3,8 @@ package com.example.lapt.controller;
 import com.example.lapt.entity.Laptop;
 import com.example.lapt.service.LaptopService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +30,10 @@ public class LaptopController {
     @PostMapping("/createLaptop")
     public ResponseEntity<Laptop> createLaptop(@RequestBody Laptop laptop){
         return ResponseEntity.ok(laptopService.addLaptop(laptop));
+    }
+
+    @PostMapping("/saludo2")
+    public ResponseEntity<String> saludo2(){
+        return ResponseEntity.ok("Saludo 2");
     }
 }
