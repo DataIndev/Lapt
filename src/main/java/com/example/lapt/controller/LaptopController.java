@@ -3,16 +3,14 @@ package com.example.lapt.controller;
 import com.example.lapt.entity.Laptop;
 import com.example.lapt.service.LaptopService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class LaptopController {
 
     private final LaptopService laptopService;
