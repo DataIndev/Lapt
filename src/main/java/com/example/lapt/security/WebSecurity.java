@@ -1,8 +1,10 @@
-package com.example.lapt.config;
+package com.example.lapt.security;
 
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,42 +17,63 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurity {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManagerBuilder authManager) throws Exception {
+        return http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/**", "/login").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
+                .httpBasic()
+                .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .build();
 
-
-        return http.build();
     }
+
+    //CREAMOS USUARIOS EN MEMORIA
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("user")
-                .password(getPasswordEncoder().encode("user"))
+        Collection<UserDetails> usuarios = new HashSet<>();
+
+        UserDetails user = User
+                .withUsername("user")
+                .password(passwordEncoder().encode("user"))
                 .roles("USER")
                 .build();
-        UserDetails admin = User.withUsername("admin")
-                .password(getPasswordEncoder().encode("admin"))
+        UserDetails admin = User
+                .withUsername("admin")
+                .password(passwordEncoder().encode("admin"))
                 .roles("ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(user, admin);
+
+        usuarios.add(user);
+        usuarios.add(admin);
+
+        return new InMemoryUserDetailsManager(usuarios);
     }
 
     @Bean
-    public PasswordEncoder getPasswordEncoder(){
+    AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService())
+                .passwordEncoder(passwordEncoder())
+                .and().build();
+
+    }
+
+    private PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 

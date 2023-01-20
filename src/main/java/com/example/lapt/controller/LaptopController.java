@@ -20,8 +20,13 @@ public class LaptopController {
         return  ResponseEntity.ok(laptopService.findById(id));
     }
 
-    @GetMapping("/saludo")
-    public ResponseEntity<String> getLaptopById(){
+    @GetMapping("/saludo1")
+    public ResponseEntity<String> saludo1(){
+        return ResponseEntity.ok("Hola mundo");
+    }
+
+    @GetMapping("/saludo2")
+    public ResponseEntity<String> saludo2(){
         return ResponseEntity.ok("Hola mundo");
     }
 
@@ -30,8 +35,4 @@ public class LaptopController {
         return ResponseEntity.ok(laptopService.addLaptop(laptop));
     }
 
-    @PostMapping("/saludo2")
-    public ResponseEntity<String> saludo2(){
-        return ResponseEntity.ok("Saludo 2");
-    }
 }
