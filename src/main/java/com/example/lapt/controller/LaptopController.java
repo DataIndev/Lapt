@@ -15,24 +15,12 @@ public class LaptopController {
 
     private final LaptopService laptopService;
 
-    @GetMapping("/getLaptopById/{id}")
-    public ResponseEntity<Optional<Laptop>> getLaptopById(@PathVariable Long id){
-        return  ResponseEntity.ok(laptopService.findById(id));
+    @GetMapping("findById/{id}")
+    public ResponseEntity<Optional<Laptop>> findById(@PathVariable Long id){
+        return laptopService.findById(id);
     }
 
-    @GetMapping("/saludo1")
-    public ResponseEntity<String> saludo1(){
-        return ResponseEntity.ok("Hola mundo");
-    }
 
-    @GetMapping("/saludo2")
-    public ResponseEntity<String> saludo2(){
-        return ResponseEntity.ok("Hola mundo");
-    }
 
-    @PostMapping("/createLaptop")
-    public ResponseEntity<Laptop> createLaptop(@RequestBody Laptop laptop){
-        return ResponseEntity.ok(laptopService.addLaptop(laptop));
-    }
 
 }
