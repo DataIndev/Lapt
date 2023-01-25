@@ -40,14 +40,19 @@ public class LaptopService {
 
     //UPDATE LAPTOP
     public ResponseEntity<Laptop> updateLaptop(Laptop laptop) {
+
         return repo.existsById(laptop.getId()) ? ResponseEntity.ok((repo.save(laptop))) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     //DELETE LAPTOP BY ID
-    public void deleteById(Long id) {
-        if(repo.existsById(id)) {
-            repo.deleteById(id);
-        }
+    public ResponseEntity<String> deleteLaptopById(Long id) {
+        repo.deleteById(id);
+        return ResponseEntity.ok("Laptop with id " + id + "was delete successfully");
+    }
+
+    //DELETE ALL LAPTOPS
+    public ResponseEntity<String> deleteAll() {
+        return ResponseEntity.ok("All data deleted successfully");
     }
 
 

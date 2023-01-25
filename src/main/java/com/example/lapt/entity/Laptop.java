@@ -20,4 +20,9 @@ public class Laptop
     private String modelo;
     private String precio;
 
+    public Laptop(String marca, String modelo, String precio) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.precio = precio;
+    }
 }
