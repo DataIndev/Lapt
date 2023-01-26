@@ -3,7 +3,6 @@ package com.example.lapt.controller;
 import com.example.lapt.entity.Laptop;
 import com.example.lapt.service.LaptopService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +36,8 @@ public class LaptopController {
         return laptopService.updateLaptop(laptop);
     }
 
-    @DeleteMapping("/delete/{id5}")
-    public ResponseEntity<String> deeleteById(@PathVariable Long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id){
         return laptopService.deleteLaptopById(id);
     }
 

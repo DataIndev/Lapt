@@ -1,13 +1,9 @@
 package com.example.lapt.service;
 
 
-import com.example.lapt.controller.LaptopController;
 import com.example.lapt.entity.Laptop;
 import com.example.lapt.repository.LaptopRepo;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LaptopService {
     private final LaptopRepo repo;
-    Logger logger = LoggerFactory.getLogger(LaptopController.class);
 
 
     //CREATE LAPTOP
