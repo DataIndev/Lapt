@@ -12,9 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.convert.ValueConverter;
+import org.springframework.http.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,16 +32,36 @@ class LaptopControllerTest {
 
     @BeforeEach
     void setUp() {
-        restTemplateBuilder = restTemplateBuilder.rootUri("http://localhost:" + port).basicAuthentication("user","user");
+        restTemplateBuilder = restTemplateBuilder.rootUri("http://localhost:" + port).basicAuthentication("user", "user");
         testRestTemplate = new TestRestTemplate(restTemplateBuilder);
     }
 
     @Test
     void createLaptop() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        String json = """
+                {
+                "id":1,
+                "marca": "Toshiba",
+                "modelo":"Force 3",
+                "precio": "5000"
+                }
+                """;
+
+        HttpEntity<String> request = new HttpEntity<>(json, headers);
+        ResponseEntity<Laptop> response = testRestTemplate.exchange("/api/v1/create",HttpMethod.POST,request, Laptop.class);
+
+        Laptop result = response.getBody();
+
+        assert result != null;
+        assertEquals(1L, result.getId());
+
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {1,2,3,4,5,6})
+    @ValueSource(longs = {1, 2, 3, 4, 5, 6})
     void findById(Long id) {
         ResponseEntity<Laptop> response = testRestTemplate.getForEntity("/api/v1/findById/" + id, Laptop.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -48,7 +69,7 @@ class LaptopControllerTest {
 
     @Test
     void findAll() {
-        ResponseEntity<?> response = testRestTemplate.getForEntity("/api/v1/findAll", List.class );
+        ResponseEntity<?> response = testRestTemplate.getForEntity("/api/v1/findAll", List.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }
