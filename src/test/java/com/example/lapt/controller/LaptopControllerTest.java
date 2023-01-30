@@ -1,8 +1,6 @@
 package com.example.lapt.controller;
 
 import com.example.lapt.entity.Laptop;
-import org.apache.coyote.Response;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,11 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.data.convert.ValueConverter;
 import org.springframework.http.*;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +37,7 @@ class LaptopControllerTest {
     void createLaptop() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         String json = """
                 {
                 "id":1,
@@ -76,10 +73,28 @@ class LaptopControllerTest {
 
     @Test
     void update() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        String json = """
+                {
+                "id":1,
+                "marca": "Toshiba",
+                "modelo":"Force 3",
+                "precio": "5000"
+                }
+                """;
+        HttpEntity<String> request = new HttpEntity<>(json,headers);
+        ResponseEntity<Laptop> response = testRestTemplate.exchange("/api/v1/update", HttpMethod.PUT,request, Laptop.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
     }
 
     @Test
     void deleteById() {
+
+
     }
 
     @Test
